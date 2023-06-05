@@ -33,8 +33,8 @@ print(torch.cuda.is_available())
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 print(device)
 
-model = BertForTokenClassification.from_pretrained('./my_model')
-tokenizer = BertTokenizerFast.from_pretrained('./my_tokenizer')
+model = RobertaForTokenClassification.from_pretrained('./my_model_roberta-long')
+tokenizer = RobertaTokenizerFast.from_pretrained('./my_tokenizer_roberta-long')
 model.to(device)  # Don't forget to move your model to the GPU if available
 
 

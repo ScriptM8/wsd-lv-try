@@ -3,14 +3,10 @@ from process_corpus_h import process_corpus
 from generate_from_db import generate_data
 
 sentences, labels = generate_data()
-#print(f"Number of sentences: {len(sentences)}")
-#print(sentences[0:3])
-
-#print(f"Number of labels: {len(labels)}")
-#print(labels[0:3])
+#sentences ['sentence1', 'this is another sentence']..
+#labels [[token1], [value2, value2, value2, value2]] integer values (senses) for each token in the sentence
 '''
 print(labels)
-
 for i in range(len(sentences)):
     print("Original Sentence:", sentences[i])
     print("Replaced Sentence:", labels[i])
@@ -19,16 +15,11 @@ for i in range(len(sentences)):
 max_value = max(max(sublist) for sublist in labels)
 print(max_value)
 
-'''
-words, labels_corpus = process_corpus("princis.conll")
-print(len(words), words)
-print(len(labels_corpus), labels_corpus)
-'''
-
 from transformers import BertTokenizerFast, BertForSequenceClassification, Trainer, TrainingArguments, \
     BertForTokenClassification, DistilBertForTokenClassification, DistilBertTokenizerFast, RobertaTokenizerFast, \
     RobertaForTokenClassification, ElectraTokenizerFast, ElectraForTokenClassification
 from torch.utils.data import Dataset, random_split
+
 import torch
 
 print(torch.version)
@@ -39,7 +30,7 @@ print(device)
 
 class WSDDataSet(Dataset):
     def __init__(self, data, label):
-        self.tokenizer = ElectraTokenizerFast.from_pretrained('google/electra-base-discriminator')
+        self.tokenizer = RobertaTokenizerFast.from_pretrained('roberta-base')
         self.data = data
         self.labels = labels
 
@@ -90,12 +81,12 @@ test_size = len(wsd_dataset) - train_size
 
 train_dataset, test_dataset = random_split(wsd_dataset, [train_size, test_size])
 
-model = ElectraForTokenClassification.from_pretrained('google/electra-base-discriminator', num_labels=max_value + 1)
+model = RobertaForTokenClassification.from_pretrained('roberta-base', num_labels=max_value + 1)
 model.to(device)  # Move the model to the GPU
 
 training_args = TrainingArguments(
     output_dir='./results',
-    num_train_epochs=3,
+    num_train_epochs=10,
     per_device_train_batch_size=4,
     per_device_eval_batch_size=16,
     gradient_accumulation_steps=True,
@@ -112,6 +103,6 @@ trainer = Trainer(
 )
 
 trainer.train()
-model.save_pretrained('./my_model_electra')
-wsd_dataset.tokenizer.save_pretrained('./my_tokenizer_electra')
+model.save_pretrained('./my_model_roberta-long')
+wsd_dataset.tokenizer.save_pretrained('./my_tokenizer_roberta-long')
 

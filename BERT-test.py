@@ -9,8 +9,8 @@ device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cp
 print(device)
 
 
-model = ElectraForTokenClassification.from_pretrained('./my_model_electra')
-tokenizer = ElectraTokenizerFast.from_pretrained('./my_tokenizer_electra')
+model = RobertaForTokenClassification.from_pretrained('./my_model_roberta-long')
+tokenizer = RobertaTokenizerFast.from_pretrained('./my_tokenizer_roberta-long')
 model.to(device)  # Don't forget to move your model to the GPU if available
 def predict(sentence):
     inputs = tokenizer(sentence, truncation=True, padding=True, return_tensors="pt")
@@ -22,7 +22,7 @@ def predict(sentence):
     return predicted_senses
 
 # Now you can use the function to get predictions
-sentence = "Es gribu ēst"
+sentence = "Man gribās mācīties"
 predicted_senses = predict(sentence)
 print(f"The predicted senses in '{sentence}' are: '{predicted_senses}'")
 

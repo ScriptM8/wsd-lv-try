@@ -13,7 +13,7 @@ def generate_data():
     connection = psycopg2.connect(
         dbname="postgres",
         user="postgres",
-        password="rrr22678max123",
+        password="password",
         host="localhost",  # replace with your host if different
         port="5432"  # replace with your port if different
     )
